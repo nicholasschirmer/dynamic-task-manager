@@ -1,0 +1,49 @@
+<div class="boards_main">
+    <!-- not thrilled with the look of the new Material buttons. -->
+    <div class="create_board">
+        <button mat-fab color="primary" class="create_board__button" (click)="addBoard()">New Board <mat-icon>add</mat-icon></button>
+    </div>
+    <!-- I am unsure how to do array item tracking as the documentation is quite confusing. very simplistic in vanilla Angular. i.e. track: $index -->
+    <!-- here we are looping through the boards in state to create multiple boards-->
+    <div class="board" *rxFor="let board of boardState.boards$;">
+        <div class="board__header">
+            <!-- you shouldn't be able to delete or change the Backlog as it is needed for storing homeless tickets -->
+            @if (boardEdit$ === board) {
+                <form [formGroup]="boardNameForm" (ngSubmit)="onNameSubmit()">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name" placeholder="Board Name">
+                    </mat-form-field>
+                    <button mat-mini-fab type="submit" color="primary"><mat-icon>check</mat-icon></button>
+                </form>
+            } @else {
+                <div class="board__header__title">{{ board.name }}</div>
+            }
+            <!-- board crud here. -->
+             <!-- TODO: add ticket for specific board. -->
+            <div class="board__header__actions">
+                @if (board.name !== 'Backlog'){
+                <button mat-icon-button (click)="editBoard(board)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteBoard(board)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                }
+                </div>
+        </div>
+        <!-- static 3 lane approach -->
+         <!-- TODO: draggable tickets might not work with generated lanes will need R&D -->
+        <div class="board__lanes">
+            <div class="board__lanes__lane board__pending">
+                
+            </div>
+            <div class="board__lanes__lane board__active">
+                
+            </div>
+            <div class="board__lanes__lane board__completed">
+                
+            </div>
+        </div>
+    </div> 
+</div>

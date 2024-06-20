@@ -1,0 +1,35 @@
+.main_container {
+    height: 100vh;
+}
+
+.drawer {
+    width: fir-content;
+    background-color: var(--Local-Dark-Grey);
+
+    .drawer__list {
+        display: flex;
+        flex-direction: column;
+        padding: 5rem 2rem;
+        gap: 1rem;
+        justify-content: center;
+
+        .drawer__list__link {
+            color: var(--Local-White);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+
+            &:hover {
+                color: var(--Local-Blue);
+            }
+        }
+
+        .drawer__list__link_active {
+            color: var(--Local-Green);
+        }
+    }
+}
+
+.content {
+    padding: 6rem 2em;
+}
