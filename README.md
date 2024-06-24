@@ -31,3 +31,11 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## 1.0
 
 - Updated Angular to LTS for better compatibility with rx-Angular
+
+## 1.1
+
+- added boards and board crud
+
+## 1.2
+
+- added tickets and ticket crud
