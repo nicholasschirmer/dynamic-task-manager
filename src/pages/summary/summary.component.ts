@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-summary',
@@ -69,7 +70,15 @@ export class SummaryComponent {
   }
 
   deleteTicket(ticket: Ticket) {
-    this.ticketState.deleteTicket$(ticket);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {item: 'ticket'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ticketState.deleteTicket$(ticket);
+      }
+    });
   }
 
 }

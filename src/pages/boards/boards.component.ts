@@ -112,6 +112,8 @@ export class BoardsComponent {
     })
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      
       if (result) {
         this.ticketState.deleteTicket$(ticket);
       }

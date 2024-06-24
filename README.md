@@ -55,3 +55,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## 1.6
 
 - added all means for filtering the sumary page
+
+## 1.7
+
+- added confirmation dialogs to deletes
