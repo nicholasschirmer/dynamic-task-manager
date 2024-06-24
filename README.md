@@ -47,3 +47,11 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## 1.4
 
 - added remove button to ticket and removed initialized ticket
+
+## 1.5
+
+- added summary page to view all tickets
+
+## 1.6
+
+- added all means for filtering the sumary page

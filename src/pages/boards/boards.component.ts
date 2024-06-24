@@ -23,6 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-boards',
@@ -53,7 +54,15 @@ export class BoardsComponent {
   }
 
   deleteBoard(board: Board) {
-    this.boardState.removeBoard$(board)
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {item: "board"}
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.boardState.removeBoard$(board);
+      }
+    });
   }
 
   getTicketsForBoard(board: Board) {
@@ -97,7 +106,16 @@ export class BoardsComponent {
   }
 
   deleteTicket(ticket: Ticket) {
-    this.ticketState.deleteTicket$(ticket);
+    // this.ticketState.deleteTicket$(ticket);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {item: "ticket"}
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ticketState.deleteTicket$(ticket);
+      }
+    });
   }
 
   onSortChange() {

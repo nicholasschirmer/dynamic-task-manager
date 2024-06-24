@@ -30,11 +30,13 @@ export class SummaryComponent {
 
   ticketSort: '' | 'priotiry' | 'dueDate' = '';
 
+  ticketStatus: 'PENDING' | 'IN_PROGRESS' | 'DONE' | 'ALL' = 'ALL';
+
   constructor(public ticketState: TicketService, private dialog: MatDialog) {
 
   }
 
-  getTicketForStatus(status: 'PENDING' | 'IN_PROGRESS' | 'DONE', sort: string) {
+  getTicketForStatus(status: 'PENDING' | 'IN_PROGRESS' | 'DONE' | 'ALL', sort: string) {
     return this.ticketState.getTicketForStatus$(status, sort);
   }
 

@@ -3,7 +3,6 @@ import { RxState } from '@rx-angular/state';
 import { Ticket } from '../models/ticket';
 import { map } from 'rxjs';
 import { Board } from '../models/board';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -52,8 +51,29 @@ export class TicketService extends RxState<Ticket[]> {
     }
   }
 
-  getTicketForStatus$(status: 'PENDING' | 'IN_PROGRESS' | 'DONE', sort: string) {
+  getTicketForStatus$(status: 'ALL' | 'PENDING' | 'IN_PROGRESS' | 'DONE', sort: string) {
     
+    if (status === 'ALL') {
+      switch (sort) {
+        case '': {
+          return this.select().pipe(map(tickets => Object.values(tickets)));
+          break;
+        }
+        case 'priority': {
+          console.log(sort);
+          return this.select().pipe(map(tickets => Object.values(tickets).sort((a, b) => this.priorityOrder[b.priority] - this.priorityOrder[a.priority])));
+          break;
+        }
+        case 'dueDate': {
+          return this.select().pipe(map(tickets => Object.values(tickets).sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())));
+          break;
+        }
+        default: {
+          return this.select().pipe(map(tickets => Object.values(tickets)));
+          break;
+        }
+      }
+    } else {
     switch (sort) {
       case '': {
         return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.status === status)));
@@ -73,6 +93,7 @@ export class TicketService extends RxState<Ticket[]> {
         break;
       }
     }
+  }
   }
 
   getBacklogTicketByColumn$(column: string) {
