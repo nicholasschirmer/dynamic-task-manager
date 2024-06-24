@@ -91,6 +91,10 @@ export class BoardsComponent{
     });
   }
 
+  deleteTicket(ticket: Ticket) {
+    this.ticketState.deleteTicket$(ticket);
+  }
+
   onNameSubmit() {
     if (this.boardEdit$) {
       this.boardEdit$.name = this.boardNameForm.value.name!;

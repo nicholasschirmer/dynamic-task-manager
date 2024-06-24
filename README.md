@@ -43,3 +43,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## 1.3
 
 - added labels to lanes
+
+## 1.4
+
+- added remove button to ticket and removed initialized ticket

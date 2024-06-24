@@ -3,7 +3,6 @@ import { RxState } from '@rx-angular/state';
 import { Ticket } from '../models/ticket';
 import { map } from 'rxjs';
 import { Board } from '../models/board';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,8 @@ export class TicketService extends RxState<Ticket[]> {
   constructor() {
     super();
 
-    this.set([{ id: uuidv4(), title: 'First Ticket', description: 'This is the first ticket', status: 'PENDING', priority: 'LOW', createdAt: new Date(), dueDate: new Date(), assignee: null, board: null }]);
+    // defualt test ticket with no board as you cannot initialize a ticket with a board that does not exist
+    // this.set([{ id: uuidv4(), title: 'First Ticket', description: 'This is the first ticket', status: 'PENDING', priority: 'LOW', createdAt: new Date(), dueDate: new Date(), assignee: null, board: null }]);
   }
 
   getTicketsForBoard$(board: Board) {
