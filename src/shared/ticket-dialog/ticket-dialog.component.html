@@ -1,0 +1,44 @@
+<div class="title ticket_title">
+    Create/update a ticket
+</div>
+<form [formGroup]="ticketForm" (ngSubmit)="onSubmit" class="form_grid">
+    <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Ticket Title">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" placeholder="Ticket Description"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Due Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dueDate">
+        <mat-hint class="ticket_hint">YYYY/MM/DD</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select formControlName="status" placeholder="Status">
+            <mat-option value="PENDING">Pending</mat-option>
+            <mat-option value="IN_PROGRESS">In Progress</mat-option>
+            <mat-option value="DONE">Done</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select formControlName="priority" placeholder="Priority">
+            <mat-option value="LOW">Low</mat-option>
+            <mat-option value="MEDIUM">Medium</mat-option>
+            <mat-option value="HIGH">High</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select formControlName="board" placeholder="none">
+            <mat-option [value]="board" *rxFor="let board of boardState.boards$">{{ board.name }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div></div>
+    <div class="buttons">
+        <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="ticketForm.invalid">Save</button>
+    </div>
+</form>

@@ -1,0 +1,11 @@
+.ticket_title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.ticket_hint {
+    color: var(--Local-Grey);
+}

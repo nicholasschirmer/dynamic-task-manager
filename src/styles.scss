@@ -13,3 +13,25 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--Local-White);
+    height: fit-content;
+    column-span: 2;
+}
+
+.form_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    padding: 32px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    gap: 12px;
+}

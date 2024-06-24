@@ -3,6 +3,7 @@ import { RxState } from '@rx-angular/state';
 import { Board } from '../models/board';
 import { v4 as uuidv4 } from 'uuid';
 import { map } from 'rxjs';
+import { TicketService } from './ticket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class BoardService extends RxState<Board[]> {
     map(boards => Object.values(boards))
   );
 
-  constructor() {
+  constructor(private ticketState: TicketService) {
     super();
 
     this.set(Object.values([
@@ -27,12 +28,16 @@ export class BoardService extends RxState<Board[]> {
   }
 
   editBoard$(boards: Board[]) {
-    console.log(boards);
-    
     this.set(boards);
   }
 
   removeBoard$(board: Board) {
+    this.ticketState.getTicketsForBoard$(board).subscribe(tickets => {
+      for (const ticket of tickets) {
+        this.ticketState.editTicket$({ ...ticket, board: null });
+      }
+    });
+    
     const tempboards = this.get();
     for (const key in tempboards) {
       if (tempboards[key].id === board.id) {
@@ -40,5 +45,5 @@ export class BoardService extends RxState<Board[]> {
       }
     }
     this.set(tempboards);
-    }
+  }
 }

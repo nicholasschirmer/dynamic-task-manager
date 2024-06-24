@@ -1,15 +1,14 @@
-import { UUID } from "crypto";
 import { Person } from "./person";
 import { Board } from "./board";
 
 export interface Ticket {
-    id: UUID;
+    id: string;
     title: string;
     description: string;
     status: 'PENDING' | 'IN_PROGRESS' | 'DONE' | 'CANCELLED';
+    priority: 'LOW' | 'MEDIUM' | 'HIGH';
     createdAt: Date;
     dueDate: Date;
-    updatedAt: Date;
-    assignee: Person;
-    board: Board;
+    assignee: Person | null;
+    board: Board | null;
 }
