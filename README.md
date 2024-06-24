@@ -39,3 +39,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## 1.2
 
 - added tickets and ticket crud
+
+## 1.3
+
+- added labels to lanes
