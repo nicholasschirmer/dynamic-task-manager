@@ -1,7 +1,7 @@
 //general imports
 import { Component } from '@angular/core';
 import { RxFor } from '@rx-angular/template/for';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { DatePipe } from '@angular/common';
@@ -12,6 +12,7 @@ import { BoardService } from '../../services/board.service';
 import { TicketService } from '../../services/ticket.service';
 import { TicketDialogComponent } from '../../shared/ticket-dialog/ticket-dialog.component';
 import { Ticket } from '../../models/ticket';
+import { StatusPipe } from '../../formatters/status.pipe';
 
 //material imports
 import { MatButtonModule } from '@angular/material/button';
@@ -20,15 +21,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-boards',
   standalone: true,
-  imports: [RxFor, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatCardModule, DatePipe],
+  imports: [RxFor, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatCardModule, DatePipe, FormsModule, MatSelectModule, MatRadioModule, StatusPipe],
   templateUrl: './boards.component.html',
   styleUrl: './boards.component.scss'
 })
-export class BoardsComponent{
+export class BoardsComponent {
 
   boardEdit$: Board | null = null;
 
@@ -36,14 +39,16 @@ export class BoardsComponent{
     name: new FormControl('')
   });
 
-  constructor( public boardState: BoardService, private dialog: MatDialog, public ticketState: TicketService ) {}
+  ticketSort: '' | 'priotiry' | 'dueDate' = '';
+
+  constructor(public boardState: BoardService, private dialog: MatDialog, public ticketState: TicketService) { }
 
   addBoard() {
     this.boardState.addBoard$({ id: uuidv4(), name: 'New Board', createdAt: new Date() });
   }
 
   editBoard(board: Board,) {
-    this.boardNameForm.setValue( board.name? { name: board.name } : { name: '' });
+    this.boardNameForm.setValue(board.name ? { name: board.name } : { name: '' });
     this.boardEdit$ = board;
   }
 
@@ -55,8 +60,8 @@ export class BoardsComponent{
     return this.ticketState.getTicketsForBoard$(board);
   }
 
-  getTicketsForColumn(board: Board, column: string) {
-    return this.ticketState.getTicketsForColumn$(board, column);
+  getTicketsForColumn(board: Board, column: string, sort: string) {
+    return this.ticketState.getTicketsForColumn$(board, column, sort);
   }
 
   getBacklogTicketsForColumn(colunmn: string) {
@@ -65,7 +70,7 @@ export class BoardsComponent{
 
   addTicket(board: Board) {
     const dialogRef = this.dialog.open(TicketDialogComponent, {
-      data: { ticket: {board: board}, mode: 'add'},
+      data: { ticket: { board: board }, mode: 'add' },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -79,7 +84,7 @@ export class BoardsComponent{
 
   editTicket(ticket: Ticket) {
     const dialogRef = this.dialog.open(TicketDialogComponent, {
-      data: {ticket : ticket, mode: 'edit'}
+      data: { ticket: ticket, mode: 'edit' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -93,6 +98,11 @@ export class BoardsComponent{
 
   deleteTicket(ticket: Ticket) {
     this.ticketState.deleteTicket$(ticket);
+  }
+
+  onSortChange() {
+    // 
+
   }
 
   onNameSubmit() {

@@ -12,6 +12,12 @@ export class TicketService extends RxState<Ticket[]> {
   tickets$ = this.select().pipe(map(tickets => Object.values(tickets))
   );
 
+  priorityOrder: Record<string, number> = {
+    LOW: 0,
+    MEDIUM: 1,
+    HIGH: 2
+  };
+
   constructor() {
     super();
 
@@ -23,8 +29,50 @@ export class TicketService extends RxState<Ticket[]> {
     return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.board === board)));
   }
 
-  getTicketsForColumn$(board: Board, column: string) {
-    return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.board === board && ticket.status === column).sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())));
+  getTicketsForColumn$(board: Board, column: string, sort: string) {
+    
+    switch (sort) {
+      case '': {
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.board === board && ticket.status === column)));
+        break;
+      }
+      case 'priority': {
+        console.log(sort);
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.board === board && ticket.status === column).sort((a, b) => this.priorityOrder[b.priority] - this.priorityOrder[a.priority])));
+        break;
+      }
+      case 'dueDate': {
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.board === board && ticket.status === column).sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())));
+        break;
+      }
+      default: {
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.board === board && ticket.status === column)));
+        break;
+      }
+    }
+  }
+
+  getTicketForStatus$(status: 'PENDING' | 'IN_PROGRESS' | 'DONE', sort: string) {
+    
+    switch (sort) {
+      case '': {
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.status === status)));
+        break;
+      }
+      case 'priority': {
+        console.log(sort);
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.status === status).sort((a, b) => this.priorityOrder[b.priority] - this.priorityOrder[a.priority])));
+        break;
+      }
+      case 'dueDate': {
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.status === status).sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())));
+        break;
+      }
+      default: {
+        return this.select().pipe(map(tickets => Object.values(tickets).filter(ticket => ticket.status === status)));
+        break;
+      }
+    }
   }
 
   getBacklogTicketByColumn$(column: string) {
@@ -36,14 +84,11 @@ export class TicketService extends RxState<Ticket[]> {
   }
 
   editTicket$(ticket: Ticket) {
-    console.log(ticket);
 
     const tempTickets = this.get();
     for (const key in tempTickets) {
       if (tempTickets[key].id === ticket.id) {
         tempTickets[key] = ticket;
-        console.log(key);
-
       }
     }
     this.set(tempTickets);

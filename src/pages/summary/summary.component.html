@@ -1,60 +1,24 @@
-<div class="boards_main">
-    <!-- not thrilled with the look of the new Material buttons. -->
-    <div class="create_board">
-        <button mat-fab color="primary" class="create_board__button" (click)="addBoard()">New Board
-            <mat-icon>add</mat-icon>
+<div class="summary">
+    <div class="title summary__title">Summary
+        <button mat-fab (click)="addTicket()">
+            <mat-icon>add</mat-icon> Ticket
         </button>
     </div>
-    <!-- I am unsure how to do array item tracking as the documentation is quite confusing. very simplistic in vanilla Angular. i.e. track: $index -->
-    <!-- here we are looping through the boards in state to create multiple boards-->
-    <div class="board" *rxFor="let board of boardState.boards$;">
-        <div class="board__header">
-            <!-- you shouldn't be able to delete or change the Backlog as it is needed for storing homeless tickets -->
-            @if (boardEdit$ === board) {
-            <form [formGroup]="boardNameForm" (ngSubmit)="onNameSubmit()">
-                <mat-form-field appearance="fill">
-                    <mat-label>Name</mat-label>
-                    <input matInput formControlName="name" placeholder="Board Name">
-                </mat-form-field>
-                <button mat-mini-fab type="submit" color="primary"><mat-icon>check</mat-icon></button>
-            </form>
-            } @else {
-            <div class="title">{{ board.name }}</div>
-            }
-            <!-- board crud here. -->
-            <div class="board__header__actions">
-                @if (board.name !== 'Backlog'){
-                @if (boardEdit$ !== board) {
-                <button mat-icon-button (click)="editBoard(board)">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                }
-                <button mat-icon-button (click)="deleteBoard(board)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-                }
-                <button mat-fab (click)="addTicket(board)">
-                    <mat-icon>add</mat-icon> Ticket
-                </button>
-            </div>
+    <div class="board__filter">
+        <div class="board__filter_buttons">Sort By:
+            <mat-radio-group [(ngModel)]="ticketSort">
+                <mat-radio-button value="">None</mat-radio-button>
+                <mat-radio-button value="priority">Priority</mat-radio-button>
+                <mat-radio-button value="dueDate">Due Date</mat-radio-button>
+            </mat-radio-group>
         </div>
-        <div class="board__filter">
-            <div class="board__filter_buttons">Sort By: 
-                <mat-radio-group (change)="onSortChange()" [(ngModel)]="ticketSort">
-                    <mat-radio-button value="">None</mat-radio-button>
-                    <mat-radio-button value="priority">Priority</mat-radio-button>
-                    <mat-radio-button value="dueDate">Due Date</mat-radio-button>
-                </mat-radio-group>
-            </div>
-        </div>
-        <!-- static 3 lane approach -->
-        <!-- TODO: draggable tickets might not work with generated lanes will need R&D -->
+    </div>
+    <div class="board">
         <div class="board__lanes">
             <div class="board__lanes__lane board__pending">
                 <div class="board__lanes__lane__label">Pending</div>
                 <!-- I realise that this card could be a component on its own and it would cut down on the repetition however it wouldnt eliminate repetition and the effort outweighs the result -->
-                <mat-card
-                    *rxFor="let ticket of board.name === 'Backlog'? getBacklogTicketsForColumn('PENDING') : getTicketsForColumn(board, 'PENDING', ticketSort)">
+                <mat-card *rxFor="let ticket of getTicketForStatus('PENDING', ticketSort)">
                     <mat-card-header>
                         <mat-card-title>{{ ticket.title }}</mat-card-title>
                     </mat-card-header>
@@ -72,8 +36,7 @@
             </div>
             <div class="board__lanes__lane board__active">
                 <div class="board__lanes__lane__label">In Progress</div>
-                <mat-card
-                    *rxFor="let ticket of board.name === 'Backlog'? getBacklogTicketsForColumn('IN_PROGRESS') : getTicketsForColumn(board, 'IN_PROGRESS', ticketSort)">
+                <mat-card *rxFor="let ticket of getTicketForStatus('IN_PROGRESS', ticketSort)">
                     <mat-card-header>
                         <mat-card-title>{{ ticket.title }}</mat-card-title>
                     </mat-card-header>
@@ -91,8 +54,7 @@
             </div>
             <div class="board__lanes__lane board__completed">
                 <div class="board__lanes__lane__label">Done</div>
-                <mat-card
-                    *rxFor="let ticket of board.name === 'Backlog'? getBacklogTicketsForColumn('DONE') : getTicketsForColumn(board, 'DONE', ticketSort)">
+                <mat-card *rxFor="let ticket of getTicketForStatus('DONE', ticketSort)">
                     <mat-card-header>
                         <mat-card-title>{{ ticket.title }}</mat-card-title>
                     </mat-card-header>

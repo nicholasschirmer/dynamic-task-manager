@@ -22,6 +22,7 @@ export class AppComponent {
 
   //was going to add a summary but the didn't have the time so I will leave in the modular menu code
   readonly menuItems: MenuItem[] = [
+    { name: 'Summary', route: '/summary' },
     { name: 'Boards', route: '/boards' },
   ];
   

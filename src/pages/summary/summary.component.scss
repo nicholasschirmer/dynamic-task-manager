@@ -1,11 +1,24 @@
-.create_board {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 50px;
-    .create_board__button {
+.summary {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 40px;
+
+    .summary__title {
         width: fit-content;
-        padding: 12px;
+        button {
+            width: fit-content;
+            padding: 10px;
+        }
+    }
+
+    table {
+        width: 100%;
+
+        tr {
+            padding: 10px;
+            background: var(--Local-Grey);
+        }
     }
 }
 
